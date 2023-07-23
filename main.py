@@ -8,7 +8,7 @@ from langchain.memory import ConversationBufferMemory
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-import warnings
+import warnings 
 warnings.filterwarnings('ignore')
 _=load_dotenv(find_dotenv())
 openai.api_key=os.environ['OPENAI_API_KEY']
@@ -32,12 +32,25 @@ def get_response():
     try:
         data = request.get_json()
         name = data['name']
-        age = data['age']
+        bday = data['bday']
         gender = data['gender']
-        conditions = data[conditions]
-        allergies = data[allergies]
-        medications = data['medications']
-        memory.save_context({'input':f"my name is {name}. my age is {age}. my gender is {gender}. my conditions are{conditions}. my allergies are {allergies}. my medications are {medications}"},{'output':'okay.'})
+        conditions = str(data['conditions'])
+        allergies = str(data['allergies'])
+        medications = str(data['medications'])
+        blood = str(data['bloodType'])
+        height = str(data['height'])
+        weight = str(data['weight'])
+        glycemia = str(data['glycemia'])
+        #allergies, conditions, and medications 
+        #print the whole reuest body 
+
+        print(
+            f"Name:{name}\nBDay:{bday}, Gender:{gender}"
+            #f"Conditions:{conditions}\nAllergies:{allergies}\nMedications:{medications}"
+            f"Blood Type:{blood}\nHeight:{height}\nWeight:{weight}\nGlycemia:{glycemia}"
+
+        )
+        memory.save_context({'input':f"my name is {name}. my birthday is {bday}. my gender is {gender}. my conditions are. my allergies are . my medications are  blood type is {blood} glycemia level is {glycemia} weight is {weight} and height is {height} and you can calculate the age since you receive the bday, my conditions are {conditions}, my medications are {medications} and my allergies are {allergies} "},{'output':'okay.'})
         user_input = data['user_input']
         print (user_input)
         bot_response = conversation.predict(input=user_input)
@@ -49,5 +62,10 @@ def get_response():
         return jsonify(error_msg), 400
 
 
+
+"""
+
+
+"""
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5000)
