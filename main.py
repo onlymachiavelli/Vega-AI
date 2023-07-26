@@ -71,8 +71,10 @@ def get_response():
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
-    X_new=pd.DataFrame(data)
+    print(data)
+    X_new=pd.DataFrame(data,index=[0])
     predictions = gnb.predict(X_new)
+    print("shit",predictions.tolist())
     return jsonify({'predictions': predictions.tolist()})
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000)
+    app.run(host="0.0.0.0",port=5000, debug=True)
