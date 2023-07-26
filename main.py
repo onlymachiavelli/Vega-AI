@@ -6,6 +6,12 @@ from dotenv import load_dotenv, find_dotenv
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from flask import Flask, jsonify, request
+import joblib
+import pandas as pd
+from flask import Flask, request, jsonify
+
+gnb=joblib.load('model.h5')
+
 
 app = Flask(__name__)
 import warnings 
@@ -62,10 +68,11 @@ def get_response():
         return jsonify(error_msg), 400
 
 
-
-"""
-
-
-"""
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json
+    X_new=pd.DataFrame(data)
+    predictions = gnb.predict(X_new)
+    return jsonify({'predictions': predictions.tolist()})
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5000)
