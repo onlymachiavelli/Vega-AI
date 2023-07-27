@@ -80,7 +80,7 @@ def predict():
         print(e)
         return jsonify(error_msg), 400
 @app.route('/heart', methods=['POST'])
-def predict():
+def heart():
     try:
         data = request.json
         X_new=pd.DataFrame(data)
