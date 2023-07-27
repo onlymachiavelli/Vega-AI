@@ -18,6 +18,6 @@ scaler.fit(X)
 X_train,X_valid,y_train,y_valid=train_test_split(X,y,train_size=0.8,random_state=0)
 model=GaussianNB()
 model.fit(X,y)
-file='model.h5'
+file= 'health.h5'
 joblib.dump(model,file)
 

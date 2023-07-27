@@ -10,8 +10,8 @@ import joblib
 import pandas as pd
 from flask import Flask, request, jsonify
 
-gnb=joblib.load('model.h5')
-
+gnb=joblib.load('health.h5')
+voter=joblib.load('heart.h5')
 
 app = Flask(__name__)
 import warnings 
@@ -68,11 +68,28 @@ def get_response():
         return jsonify(error_msg), 400
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/health', methods=['POST'])
 def predict():
-    data = request.json
-    X_new=pd.DataFrame(data)
-    predictions = gnb.predict(X_new)
-    return jsonify({'predictions': predictions.tolist()})
+    try:
+        data = request.json
+        X_new=pd.DataFrame(data)
+        predictions = gnb.predict(X_new)
+        return jsonify({'predictions': predictions.tolist()})
+    except Exception as e:
+        error_msg = {'error': 'Invalid request data. Please provide a valid "user_input" field in the JSON data.'}
+        print(e)
+        return jsonify(error_msg), 400
+@app.route('/heart', methods=['POST'])
+def predict():
+    try:
+        data = request.json
+        X_new=pd.DataFrame(data)
+        predictions = voter.predict(X_new)
+        return jsonify({'predictions': predictions.tolist()})
+    except Exception as e:
+        error_msg = {'error': 'Invalid request data. Please provide a valid "user_input" field in the JSON data.'}
+        print(e)
+        return jsonify(error_msg), 400
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5000)
