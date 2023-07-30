@@ -18,7 +18,6 @@ import warnings
 warnings.filterwarnings('ignore')
 _=load_dotenv(find_dotenv())
 openai.api_key=os.environ['OPENAI_API_KEY']
-print(openai.api_key)
 chat=ChatOpenAI(temperature=0)
 memory=ConversationBufferMemory()
 template="""You are a very smart medical doctor named VegaBot. \
@@ -69,10 +68,10 @@ def get_response():
 
 
 @app.route('/health', methods=['POST'])
-def predict():
+def health():
     try:
         data = request.json
-        X_new=pd.DataFrame(data)
+        X_new=pd.DataFrame(data, index=[0])
         predictions = gnb.predict(X_new)
         return jsonify({'predictions': predictions.tolist()})
     except Exception as e:
@@ -83,7 +82,7 @@ def predict():
 def heart():
     try:
         data = request.json
-        X_new=pd.DataFrame(data)
+        X_new=pd.DataFrame(data, index=[0])
         predictions = voter.predict(X_new)
         return jsonify({'predictions': predictions.tolist()})
     except Exception as e:

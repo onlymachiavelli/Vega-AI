@@ -7,6 +7,7 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.linear_model import LogisticRegression
 import joblib
 data=pd.read_csv('heart.csv')
+data['output']=data['output'].replace({0:'less chance of heart attack',1:'more chance of a heart attack'})
 X=data[['sex','age','trtbps','fbs','thalachh']]
 X.rename(columns={'sex':'gender','trtbps':'systole','fbs':'bloodsugar','thalachh':'heartrate'},inplace=True)
 y=data['output']
